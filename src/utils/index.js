@@ -1,3 +1,4 @@
+import config from './config'
 function formatNumber (n) {
   const str = n.toString()
   return str[1] ? str : `0${str}`
@@ -21,4 +22,19 @@ export function formatTime (date) {
 export default {
   formatNumber,
   formatTime
+}
+
+export function get(url){
+  return new Promise((reslove,reject)=>{
+    wx.request({
+        url:config.BASE_URL+url,
+        success:function(res){
+          if(res.data.code==200){
+              reslove(res.data)
+          }else{
+              reject(res.data)
+          }
+        }
+    })
+  })
 }
