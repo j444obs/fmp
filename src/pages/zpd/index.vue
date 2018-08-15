@@ -2,17 +2,16 @@
    <div class="zpd">
       <header>
          <div class="job">
-            <h1>日语翻译(测试)</h1>
-            <h2>10k-15k</h2>
+            <h1>{{job.title}}</h1>
+            <h2>{{job.salary}}</h2>
          </div>
          <div class="req">
-            <h3>上海</h3>
-            <h3>1-3年</h3>
-            <h3>大专</h3>
+            <h3>{{job.city}}</h3>
+            <h3>{{job.year}}</h3>
+            <h3>{{job.degree}}</h3>
          </div>
          <div class="tag">
-             <span>日语一级</span>
-             <span>口语流利</span>
+             <span v-for="(item,index) in tag" :key="index">{{item}}</span>
          </div>
       </header>
       <footer>
@@ -25,31 +24,26 @@
           <section>
              <h1><span></span>职位详情</h1>
              <p>
-                1.建立企业和客户间的相互了解、信任和支持的关系，树立良好的企业形象；<br/>
-                2.负责公司海内外项目日文资料的翻译和资料整理；<br/>
-                3.做好配合业务部门开展商务谈判及对外联络的日文翻译工作；<br/>
-                3.加强信息传播工作，主动收集顾客的意见和反应，及时向管理部门通报各种信息，协助管理部门制定经营决策；<br/>
-                4.领导交办的其他工作；
+                <span v-for="(item,index) in detail" :key="index">{{item}};<br/></span>
+
              </p>
           </section>
          <section>
             <h1><span></span>任职要求</h1>
             <p>
-               1、大专或以上学历，中日文互译熟练，有英语基础，电脑办公软件熟练；<br/>
-               2、有两年以上制造业技术方面翻译经验，有光学、模具行业工厂翻译工作经验优先；<br/>
-               3、性格随和，与外籍人员沟通有礼貌，尊重客人风俗习惯和工作保密、纪律性强。
+               <span v-for="(item,index) in jreqire" :key="index">{{item}};<br/></span>
             </p>
          </section>
 
          <section>
             <h1><span></span>工作地址</h1>
             <p>
-               韶山南路498号外国语学院
+               {{job.adress}}
             </p>
             <map id="map"
                  show-location
-                 longitude="112.9972700000"
-                 latitude="28.133210000" scale="14"
+                 :longitude="job.longitude"
+                 :latitude="job.latitude" scale="14"
                  style="width: 100%; height: 200px;"
                  :marker="marker"
                  :covers="covers"
@@ -61,29 +55,76 @@
    </div>
 </template>
 <script type="text/ecmascript-6">
+   import {get} from '../../utils/index';
   export default {
       data(){
         return{
-            marker:{
-                id:1,
-                longitude:112.9972700000,
-                latitude:28.133210000,
-
+            share:require('./share.png'),
+            pos:require('./pos.png'),
+            job:{
+               title:'',
+               salary:'',
+               city:'',
+               year:'',
+               degree:'',
+               tag:'',
+               detail:'',
+               jreqire:'',
+               adress:'',
+               longitude:'',
+               latitude:'',
+               contact:''
             },
-            covers: [{
-                latitude: 28.133210000,
-                longitude: 112.9972700000,
-                iconPath: require('./pos.png')
-            }
-            ],
-            share:require('./share.png')
+           covers:[{
+                      latitude: '28.133210',
+                      longitude:'112.997270',
+                      iconPath: 'http://www.dijiadijia.com/imgs/pos.png'
+                   }
+                   ]
         }
+      },
+     computed:{
+        tag(){
+           if(this.job.tag){
+              return this.job.tag.split(',')
+           }else{
+              return [];
+           }
+        },
+        detail(){
+           if(this.job.detail){
+              return this.job.detail.split(';')
+           }else{
+              return [];
+           }
+        },
+        jreqire(){
+           if(this.job.jreqire){
+              return this.job.jreqire.split(';')
+           }else{
+              return [];
+           }
+        },
+        marker(){
+          return  {
+              id:1,
+              longitude:this.job.longitude,
+              latitude:this.job.longitude,
+           }
+        },
+        covers(){
+         return [{
+           latitude: '28.133210',
+           longitude:'112.997270',
+           iconPath: 'http://www.dijiadijia.com/imgs/pos.png'
+        }]
+     }
       },
       methods:{
           commit(){
               wx.showModal({
                   title: '联系方式',
-                  content: '电话:021-88xxxxxx\r\n邮箱:xxxxxx@163.com\n联系人:小明',
+                  content: this.job.contact,
                   success: function(res) {
                       if (res.confirm) {
 
@@ -92,18 +133,37 @@
                       }
                   }
               })
-          }
+          },
+         covers(){
+            return [{
+               latitude: this.job.latitude,
+               longitude:this.job.longitude,
+               iconPath: require('./share.png')
+            }
+            ]
+         }
 
       },
-      mounted(){
-          wx.setNavigationBarTitle({
-              title: '职位详情'
-          });
-          wx.setNavigationBarColor({
-              frontColor: '#000000',
-              backgroundColor: 'white',
-          })
-      }
+
+     onLoad:function(options){
+        wx.hideLoading();
+        get('jobdetail&id='+options.id).then((res)=>{
+           wx.hideLoading();
+           if(res.status==200){
+            this.job=res.data
+           }else{
+              wx.hideLoading();
+           }
+        });
+        wx.setNavigationBarTitle({
+           title: '职位详情'
+        });
+        wx.setNavigationBarColor({
+           frontColor: '#000000',
+           backgroundColor: 'white',
+        });
+
+     }
   }
 
 </script>
@@ -227,9 +287,4 @@
       line-height: 14px;
       padding: 7px 10px;
    }
-
-
-
-
-
 </style>

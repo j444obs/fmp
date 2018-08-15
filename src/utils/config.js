@@ -1,4 +1,4 @@
-const BASE_URL='http://localhost:8080/fmp.php';
+const BASE_URL='https://dijiadijia.com/clw/index.php?C=';
 
 const config={
     BASE_URL

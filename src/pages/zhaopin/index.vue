@@ -6,13 +6,13 @@
                  <img src="http://www.dijiadijia.com/imgs/zp.png">
              </header>
              <ul>
-                 <li v-for="(item,index)  in zlist " :key="index" @click="gotodetail(index)">
+                 <li v-for="(item,index)  in zlist " :key="index" @click="gotodetail(item.id)">
                      <main>
                          <h1>{{item.title}}</h1>
-                         <h2>{{item.sa}}</h2>
+                         <h2>{{item.salary}}</h2>
                      </main>
-                     <footer>{{item.company}}</footer>
-                     <section><h3><img :src="hot" v-if="index<3">{{item.city}}</h3><h4>{{item.year}}</h4><h5>{{item.degree}}</h5></section>
+                         <footer>{{item.company}}</footer>
+                     <section><h3><img :src="hot" v-if="index<3">{{item.city}}</h3><h4>{{item.year}}年</h4><h5>{{item.degree}}</h5></section>
                  </li>
              </ul>
          </scroll-view>
@@ -21,23 +21,12 @@
    </div>
 </template>
 <script type="text/ecmascript-6">
+    import {get} from '../../utils/index';
    export default {
        data(){
            return{
                hot:require('./hot.png'),
                zlist:[
-                   {
-                       title:'日语翻译',sa:'10k-20k',company:'松上电子',city:'上海','year':'1-3年',degree:'大专'
-                   },
-                   {
-                       title:'采购担当',sa:'7k-10k',company:'洋驴农机',city:'上海','year':'2-3年',degree:'大专'
-                   },
-                   {
-                       title:'营业助理',sa:'10-30k',company:'索我中国',city:'上海','year':'3-5年',degree:'本科'
-                   },
-                   {
-                       title:'java工程师',sa:'10k-20k',company:'冬普电工',city:'上海','year':'1-3年',degree:'本科'
-                   },
                ]
            }
        },
@@ -49,9 +38,21 @@
            }
        },
        mounted(){
+           wx.showShareMenu();
+           wx.showLoading({
+               title: '加载中...',
+           });
            wx.setNavigationBarTitle({
                title: '招聘'
-           })
+           });
+            get('elist').then((res)=>{
+                wx.hideLoading();
+                if(res.status==200){
+                    this.zlist=res.data;
+                }else{
+                    this.zlist=[];
+                }
+            });
        }
    }
 

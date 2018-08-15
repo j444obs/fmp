@@ -25,6 +25,7 @@
 
 <script>
 import topSwiper from '@/components/topSwiper'
+import {get} from '../../utils/index';
 export default {
   data () {
     return {
@@ -35,20 +36,20 @@ export default {
         ],
         list1:[
             {
-                type:1,
-                title:'招聘',
-                text:'行业人才需求',
-                img:require('./zhaopin.png')
-            },
-            {
                 type:2,
-                title:'供需',
+                title:'活動',
                 text:'采销情报共享',
                 img:require('./gongxu.png')
             },
             {
+                type:1,
+                title:'応募',
+                text:'行业人才资讯',
+                img:require('./zhaopin.png')
+            },
+            {
                 type:3,
-                title:'二手',
+                title:'中古',
                 text:'转给校友放心',
                 img:require('./ershou.png')
             }
@@ -56,7 +57,7 @@ export default {
         list2:[
             {
                 type:4,
-                title:'相识',
+                title:'見合',
                 text:'懂你没说的',
                 img:require('./jiaoyou.png')
 
@@ -79,11 +80,11 @@ export default {
   methods:{
       jump(type){
           let path='';
-          if(type==1){
+          if(type==2){
               path='/pages/zhaopin/main'
           }else{
               wx.showToast({
-                  title: '暂只开放招聘功能',
+                  title: '暂只开放活動宣传',
                   icon: 'none',
                   duration: 1500
               });
@@ -97,6 +98,19 @@ export default {
   components: {
       topSwiper
   },
+    mounted(){
+        wx.showShareMenu();
+        wx.showLoading({
+            title: '加载中...',
+        });
+        get('elist').then((res)=>{
+            wx.hideLoading();
+            if(res.status==200){
+               console.log(res.data);
+            }else{
+            }
+        });
+    }
 
 
 

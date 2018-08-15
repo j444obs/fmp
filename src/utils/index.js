@@ -29,7 +29,7 @@ export function get(url){
     wx.request({
         url:config.BASE_URL+url,
         success:function(res){
-          if(res.data.code==200){
+          if(res.data.status==200){
               reslove(res.data)
           }else{
               reject(res.data)
