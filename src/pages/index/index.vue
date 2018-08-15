@@ -81,7 +81,7 @@ export default {
       jump(type){
           let path='';
           if(type==2){
-              path='/pages/zhaopin/main'
+              path='/pages/active/main'
           }else{
               wx.showToast({
                   title: '暂只开放活動宣传',
@@ -103,11 +103,10 @@ export default {
         wx.showLoading({
             title: '加载中...',
         });
-        get('elist').then((res)=>{
+        get('activity').then((res)=>{
             wx.hideLoading();
             if(res.status==200){
-               console.log(res.data);
-            }else{
+                this.tops=res.data;
             }
         });
     }

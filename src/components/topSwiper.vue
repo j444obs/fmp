@@ -8,11 +8,10 @@
               interval='6000'
               circular='true'
               duration='800'
-
       >
           <div v-for="i(item,index) in tops" :key="index">
               <swiper-item>
-                  <img :src="item.image"  class="slide-image">
+                  <img :src="item.imgurl"  class="slide-image">
               </swiper-item>
           </div>
       </swiper>
