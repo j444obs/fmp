@@ -1,14 +1,12 @@
 <template>
-   <div class="zpd">
+   <div class="acd">
       <header>
-         <div class="job">
-            <h1>{{job.title}}</h1>
-            <h2>{{job.salary}}</h2>
+         <div class="act">
+            <h1>{{activity.title}}</h1>
+            <h2>{{activity.fee}}</h2>
          </div>
          <div class="req">
-            <h3>{{job.city}}</h3>
-            <h3>{{job.year}}</h3>
-            <h3>{{job.degree}}</h3>
+            <h3>{{activity.address}}</h3>
          </div>
          <div class="tag">
              <span v-for="(item,index) in tag" :key="index">{{item}}</span>
@@ -16,34 +14,39 @@
       </header>
       <footer>
          <button open-type="share">
-            <img :src="share">
+            <img :src="share">点击分享
          </button>
-         <h1 @click="commit"><span>立即沟通</span></h1>
       </footer>
       <main>
           <section>
-             <h1><span></span>职位详情</h1>
+             <h1><span></span>活动详情</h1>
              <p>
-                <span v-for="(item,index) in detail" :key="index">{{item}};<br/></span>
+                <span v-for="(item,index) in detail" :key="index">{{item}}<br/></span>
 
              </p>
           </section>
          <section>
-            <h1><span></span>任职要求</h1>
+            <h1><span></span>联系方式</h1>
             <p>
-               <span v-for="(item,index) in jreqire" :key="index">{{item}};<br/></span>
+               <span v-for="(item,index) in contact" :key="index">{{item}}<br/></span>
+            </p>
+         </section>
+         <section>
+            <h1><span></span>活动时间</h1>
+            <p>
+               <span>{{activity.time}}</span>
             </p>
          </section>
 
          <section>
-            <h1><span></span>工作地址</h1>
+            <h1><span></span>活动地址</h1>
             <p>
-               {{job.adress}}
+               {{activity.address}}
             </p>
             <map id="map"
                  show-location
-                 :longitude="job.longitude"
-                 :latitude="job.latitude" scale="14"
+                 :longitude="activity.longitude"
+                 :latitude="activity.latitude" scale="14"
                  style="width: 100%; height: 200px;"
                  :marker="marker"
                  :covers="covers"
@@ -59,17 +62,17 @@
   export default {
       data(){
         return{
-            share:require('./share.png'),
             pos:require('./pos.png'),
-            job:{
+            share:require('./share.png'),
+            activity:{
                title:'',
-               salary:'',
+               fee:'',
                city:'',
                year:'',
                degree:'',
+               time:'',
                tag:'',
                detail:'',
-               jreqire:'',
                adress:'',
                longitude:'',
                latitude:'',
@@ -85,22 +88,22 @@
       },
      computed:{
         tag(){
-           if(this.job.tag){
-              return this.job.tag.split(',')
+           if(this.activity.tag){
+              return this.activity.tag.split(',')
            }else{
               return [];
            }
         },
         detail(){
-           if(this.job.detail){
-              return this.job.detail.split(';')
+           if(this.activity.detail){
+              return this.activity.detail.split(';')
            }else{
               return [];
            }
         },
-        jreqire(){
-           if(this.job.jreqire){
-              return this.job.jreqire.split(';')
+         contact(){
+           if(this.activity.contact){
+              return this.activity.contact.split(';')
            }else{
               return [];
            }
@@ -108,8 +111,8 @@
         marker(){
           return  {
               id:1,
-              longitude:this.job.longitude,
-              latitude:this.job.longitude,
+              longitude:this.activity.longitude,
+              latitude:this.activity.longitude,
            }
         },
         covers(){
@@ -138,7 +141,7 @@
             return [{
                latitude: this.job.latitude,
                longitude:this.job.longitude,
-               iconPath: require('./share.png')
+               iconPath: require('./pos.png')
             }
             ]
          }
@@ -147,16 +150,17 @@
 
      onLoad:function(options){
         wx.hideLoading();
-        get('jobdetail&id='+options.id).then((res)=>{
+        let id=options.id;
+        get('actdetails&id='+id).then((res)=>{
            wx.hideLoading();
            if(res.status==200){
-            this.job=res.data
+            this.activity=res.data
            }else{
               wx.hideLoading();
            }
         });
         wx.setNavigationBarTitle({
-           title: '职位详情'
+           title: '活动详情'
         });
         wx.setNavigationBarColor({
            frontColor: '#000000',
@@ -168,25 +172,25 @@
 
 </script>
 <style scoped>
-   .zpd{
+   .acd{
       font-family:"PingFang SC";
    }
-   .zpd header{
+   .acd header{
       width: 100%;
       border-bottom: 5px solid #f2f2f2;
    }
-   header .job{
+   header .act{
       display: flex;
       line-height: 30px;
    }
-   .job h1{
+   .act h1{
       flex: 3;
       padding-left: 18px;
       font-size: 22px;
       color:#303133;
    }
-   .job h2{
-      flex: 3;
+   .act h2{
+      flex: 2;
       color:#F56C6C;
       text-align: right;
       font-size: 16px;
@@ -260,6 +264,7 @@
       appearance: none;
       outline: none;
       border: 0px;
+      color:#606266;
       background-color:white
    }
    footer button::after{
@@ -269,22 +274,6 @@
       width: 30px;
       height: 30px;
       vertical-align: middle;
-   }
-   footer h1{
-      flex: 4;
-      background: #f5b0ae;
-      color:white;
-      text-align: center;
-      font-size: 16px;
-   }
-   footer h1 span{
-      background: #f56060;
-      color:white;
-      text-align: center;
-      font-size: 14px;
-      border-radius: 20px;
-      display: inline-block;
-      line-height: 14px;
-      padding: 7px 10px;
+      margin-right: 10px;
    }
 </style>

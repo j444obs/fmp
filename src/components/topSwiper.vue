@@ -9,7 +9,7 @@
               circular='true'
               duration='800'
       >
-          <div v-for="i(item,index) in tops" :key="index">
+          <div v-for="i(item,index) in tops" :key="index" @click="gotodetail(item.id)">
               <swiper-item>
                   <img :src="item.imgurl"  class="slide-image">
               </swiper-item>
@@ -19,7 +19,14 @@
 </template>
 <script type="text/ecmascript-6">
   export default {
-      props:['tops']
+      props:['tops'],
+      methods:{
+          gotodetail(id){
+              wx.navigateTo({
+                  url:'/pages/active/main?id='+id
+              })
+          }
+      }
   }
 </script>
 <style scoped>

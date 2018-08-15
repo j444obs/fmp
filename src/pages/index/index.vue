@@ -38,7 +38,7 @@ export default {
             {
                 type:2,
                 title:'活動',
-                text:'采销情报共享',
+                text:'校友集体活动',
                 img:require('./gongxu.png')
             },
             {
