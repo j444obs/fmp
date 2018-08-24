@@ -4,7 +4,7 @@
          <scroll-view scroll-y style="position: fixed;top: 0;bottom: 0" >
               <section  v-for="(item,index) in list" :key="index" @click="gotodetail(item.id)">
                   <h1><span></span>{{item.title}}</h1>
-                  <image :src="item.imgurl"  mode="aspectFit"></image>
+                  <img :src="item.imgurl">
               </section>
          </scroll-view>
      </main>
@@ -64,7 +64,7 @@
         background: #F56C6C;
         border-radius: 2px;
     }
-    .active main section image{
+    .active main section img{
         width: 96%;
         margin-left:2%;
         height: 150px;

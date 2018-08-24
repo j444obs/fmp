@@ -38,20 +38,20 @@ export default {
             {
                 type:2,
                 title:'活動',
-                text:'校友集体活动',
-                img:require('./gongxu.png')
+                text:'校友活动通知',
+                img:require('./hehe.png')
             },
             {
                 type:1,
-                title:'応募',
-                text:'行业人才资讯',
-                img:require('./zhaopin.png')
+                title:'勉強',
+                text:'相手勉強木槿',
+                img:require('./oubo.png')
             },
             {
                 type:3,
                 title:'中古',
-                text:'转给校友放心',
-                img:require('./ershou.png')
+                text:'校友大平台',
+                img:require('./zhonggu.png')
             }
         ],
         list2:[
@@ -60,7 +60,6 @@ export default {
                 title:'見合',
                 text:'懂你没说的',
                 img:require('./jiaoyou.png')
-
             },
             {
                 type:5,
@@ -82,7 +81,10 @@ export default {
           let path='';
           if(type==2){
               path='/pages/active/main'
-          }else{
+          }else if(type==1){
+              path='/pages/zhaopin/main'
+          }else
+          {
               wx.showToast({
                   title: '暂只开放活動宣传',
                   icon: 'none',

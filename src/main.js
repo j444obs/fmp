@@ -17,6 +17,8 @@ export default {
             "pages/me/main",
             "pages/all/main",
             "pages/active/main",
+            "pages/zhaopin/main",
+            "pages/zpd/main",
         ],
         window: {
             backgroundColor:'#F56C6C',
